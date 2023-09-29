@@ -17,6 +17,7 @@ limitations under the License.
 package controller
 
 import (
+	"fmt"
 	"path/filepath"
 	"testing"
 
@@ -56,6 +57,7 @@ var _ = BeforeSuite(func() {
 		ErrorIfCRDPathMissing: true,
 	}
 
+	fmt.Println("HEEEELLLOOOOO")
 	var err error
 	// cfg is defined in this file globally.
 	cfg, err = testEnv.Start()
