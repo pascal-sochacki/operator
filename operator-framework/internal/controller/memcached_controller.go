@@ -80,6 +80,7 @@ type MemcachedReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.14.1/pkg/reconcile
 func (r *MemcachedReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := log.FromContext(ctx)
+	log.Info(fmt.Sprintf("Reconcile red: %s", req.String()))
 
 	// Fetch the Memcached instance
 	// The purpose is check if the Custom Resource for the Kind Memcached
@@ -88,6 +89,7 @@ func (r *MemcachedReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	err := r.Get(ctx, req.NamespacedName, memcached)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
+
 			// If the custom resource is not found then, it usually means that it was deleted or not created
 			// In this way, we will stop the reconciliation
 			log.Info("memcached resource not found. Ignoring since object must be deleted")
@@ -118,7 +120,7 @@ func (r *MemcachedReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 	// Let's add a finalizer. Then, we can define some operations which should
 	// occurs before the custom resource to be deleted.
 	// More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/finalizers
-	if !controllerutil.ContainsFinalizer(memcached, memcachedFinalizer) {
+	if false && !controllerutil.ContainsFinalizer(memcached, memcachedFinalizer) {
 		log.Info("Adding Finalizer for Memcached")
 		if ok := controllerutil.AddFinalizer(memcached, memcachedFinalizer); !ok {
 			log.Error(err, "Failed to add finalizer into the custom resource")
